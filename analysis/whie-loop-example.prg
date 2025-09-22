@@ -1,3 +1,7 @@
+; - Queries for encounters from the last 30 days, ordered by registration date
+; - Report: Uses CCL's reporting feature for formatting 
+; - Gap filling: The while loop fills in missing date between encounters to show '0' counts
+
 drop program ccl_while_admit_cnt2 go 
 create program ccl_while_admit_cnt2
 
@@ -24,8 +28,13 @@ head page
     col 7 "Date:" ; left aligned heading cell
     col 41 "Count:" ; left center aligned heading cell 
     row + 1 ; spacing line
+; fires when the 'updated' value changes (new date group)
 foot updated 
     row + 1 ; spacing line
+    ; predate - tracks the last date processed 
+    ; updated - is the current encounter date from the 'foot updated' section
+    ; if there's a gap the loop runs for the days between
+
     while (predate < updated - 1) 
         plusdate = predate + 1
         col 8 plusdate "mm/dd/yy;;d"
@@ -36,5 +45,3 @@ foot updated
     col 40 count(e.seq) ; display count 
     predate = updated  ; set predate to updated 
 end go 
-
-; todo the while loop needs some analysis
