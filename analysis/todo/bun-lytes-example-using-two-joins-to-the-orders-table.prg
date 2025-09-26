@@ -34,3 +34,5 @@ order p.person_id, o.catalog_cd, 0
 with maxrec = 3000 
 end 
 go 
+
+; todo add analysis 
