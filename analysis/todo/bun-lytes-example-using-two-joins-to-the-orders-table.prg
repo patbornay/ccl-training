@@ -9,6 +9,7 @@ declare lytes = f8
 set bun = uar_get_code_by("displaykey", 200, "BUN")
 set lytes = uar_get_code_by("displaykey", 200, "LYTES") 
 
+; duplicate rows will not be shown 
 select distinct 
     p.person_id 
     pname = substring(1, 20, p.name_last), 
@@ -22,11 +23,12 @@ from
     person p, 
     orders o, 
     orders o2 
+; this performs an inner join with person table driving the join
 plan p where p.person_id > 0 
 join o where p.person_id = o.person_id 
     and o.order_id > 0 
     and o.catalog_cd = bun 
-join o2 where o2 where o.person_id = o2.person_id 
+join o2 where p.person_id = o2.person_id 
     and o2.order_id > 0 
     and o2.catalog_cd = lytes
 
@@ -35,4 +37,10 @@ with maxrec = 3000
 end 
 go 
 
-; todo add analysis 
+/** 
+This query performs two inner joins on the orders table to find patients who have both BUN and Lytes orders.
+The person table drives the query, then joins to orders twice: once for BUN orders (o)
+and once for Lytes order (o2). Both order aliases join back to the same person, creating a many-to-many
+relationship that produces all combinations of BUN and Lytes orders for each qulifying patient. 
+The DISTINCT clause removes any duplicate result rows
+**/
