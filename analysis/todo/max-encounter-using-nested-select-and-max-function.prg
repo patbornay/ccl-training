@@ -18,6 +18,6 @@ from person p,
     encounter e 
 plan p where p.person_id > 0 
 join e where p.person_id = e.person_id 
-    and e.encntr_id = (Select max(e2.encntr_id) from encounter e2 
+    and e.encntr_id = (select max(e2.encntr_id) from encounter e2 
         where e2.person_id = p.person_id)
 with maxrec = 100, time = value(maxsecs), noheading, format = variable

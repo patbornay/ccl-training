@@ -2,6 +2,8 @@ drop program bgr_maxencounter_rpt go
 create program bgr_maxencounter_rpt 
 
 prompt "Output to File/Printer/MINE" = "MINE"
+; The name of this program is misleading as it does not contain
+; any logic that selects a 'max'
 
 ;Request HNAM sign-on when executed from CCL on host 
 if (validate(isOdbc, 0) = 0) execute cclseclogin endif 
@@ -17,12 +19,18 @@ select into $1
 from person p, encounter e 
 plan p where p.person_id > 0
 join e where p.person_id = e.person_id 
+; inner join driven by the person table, with encounters returned when 
+; a matching person id is found 
+; this will return many encounters per person
+; which will be ordered by person id, then name
 
 order by 
     p.person_id,  
     name_full_formatted,
     0 desc
 
+; this report will display per person id the selected details 
+; and the encounter id of each encounter
 head p.person_id
     name_full_formatted1 = substring(1, 30, p.name_full_formatted), 
     col 7 p.person_id
