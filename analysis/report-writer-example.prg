@@ -109,7 +109,7 @@ head nurse_unit
     ; HEAD NURSE_UNIT: Executes once for each unique nurse_unit value (control break)
     ; Used to print section headers when the nurse_unit value changes
     ; The control break happens when the value of nurse_unit CHANGES between rows, not on every detail row.
-    ; the ORDER keywork is critical!  It sorts all the records so that rows with the same nurse_unit are grouped together.
+    ; the ORDER keyword is critical!  It sorts all the records so that rows with the same nurse_unit are grouped together.
     ; head nurse_unit: Fires when entering a NEW nurse_unit group
     ; detail: Fires for EVERY row
     ; foot nurse_unit: Fires when LEAVING a nurse_unit group (when the value changes OR at the end of all data)
